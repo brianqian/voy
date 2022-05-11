@@ -2,7 +2,9 @@
   // "extends": "@tsconfig/node14/tsconfig.json",
   "ts-node": {
     "files": true,
-    "transpileOnly": true
+    "transpileOnly": true,
+    "esm": true,
+    "swc": true,
   },
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
