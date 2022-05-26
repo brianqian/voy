@@ -1,12 +1,16 @@
 import 'dotenv/config';
+import morgan from 'koa-morgan';
 import Koa from 'koa';
+import { exampleRouter, rootRouter } from './routes/index.js';
 
-const app = new Koa();
 const PORT = process.env.PORT || 3001;
 
-app.use(async (ctx) => {
-  ctx.body = 'Hello World';
-});
+const app = new Koa();
+
+app.use(morgan('dev'));
+
+app.use(rootRouter.routes());
+app.use(exampleRouter.routes());
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
