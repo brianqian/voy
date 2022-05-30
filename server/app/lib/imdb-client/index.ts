@@ -1,15 +1,35 @@
-import got, { Options } from 'got';
-import Bourne from '@hapi/bourne';
+import { SearchData } from '../../@types/imdb-api';
+import { SearchEndpoints, SearchMethod, searchMethods } from './search';
+import { infoMethods } from './title';
 
-const options = new Options({
-  prefixUrl: 'https://imdb-api.com/api',
-  parseJson: (text) => Bourne.parse(text),
-  responseType: 'json',
-});
+const otherEndpoints = [
+  'Top250Movies',
+  'Top250TVs',
+  'MostPopularMovies',
+  'MostPopularTVs',
+  'InTheaters',
+  'ComingSoon',
+  'BoxOffice',
+  'BoxOfficeAllTime',
+  'Name',
+  'NameAwards',
+  'Company',
+  'Keyword',
+  'YouTubeTrailer',
+  'YouTube',
+  'YouTubePlaylist',
+] as const;
 
-const client = got.extend(options);
-const API_KEY = process.env.IMDB_API_KEY;
+type otherEndpoints = typeof otherEndpoints[number];
+type OtherMethod = (queryVal: string) => Promise<SearchData>;
 
-const searchForMovie = async (param: string) => {
-  const result = await client('/searchmovie/');
-};
+class ImdbApi {
+  search: Record<SearchEndpoints, SearchMethod>;
+  info: typeof infoMethods;
+  constructor() {
+    this.search = searchMethods;
+    this.info = infoMethods;
+  }
+}
+
+export const imdbApi = new ImdbApi();
