@@ -1,9 +1,10 @@
-const config: Record<string, any> = {
+const config = {
   IMDB_API_KEY: process.env.IMDB_API_KEY,
 };
 
 Object.keys(config).forEach((key) => {
-  if (config[key] === undefined) {
+  const castedKey = key as keyof typeof config;
+  if (config[castedKey] === undefined) {
     throw new Error(`env var missing for ${key}`);
   }
 });
