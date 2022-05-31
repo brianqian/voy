@@ -1,0 +1,130 @@
+{
+  "imDbId": "tt0185906",
+  "title": "Band of Brothers",
+  "fullTitle": "Band of Brothers (TV Series 2001–2001)",
+  "type": "TVSeries",
+  "year": "2001",
+  "episodes": [
+    {
+      "id": "tt1245384",
+      "seasonNumber": "1",
+      "episodeNumber": "1",
+      "title": "Currahee",
+      "image": "https://imdb-api.com/images/original/MV5BMjIxODYyNTQxOF5BMl5BanBnXkFtZTgwNzQyMzY1MTE@._V1_Ratio1.7778_AL_.jpg",
+      "year": "2001",
+      "released": "9 Sep. 2001",
+      "plot": "Easy Company goes through training under the leadership of a captain who relentlessly pushes them to their limits but may be limited as a leader in the field.",
+      "imDbRating": "8.6",
+      "imDbRatingCount": "8923"
+    },
+    {
+      "id": "tt1247465",
+      "seasonNumber": "1",
+      "episodeNumber": "2",
+      "title": "Day of Days",
+      "image": "https://imdb-api.com/images/original/MV5BMTQ0NDcxMDk5M15BMl5BanBnXkFtZTgwNjk2NDU1MjE@._V1_Ratio1.7778_AL_.jpg",
+      "year": "2001",
+      "released": "9 Sep. 2001",
+      "plot": "Easy Company paratroopers jump behind enemy lines in Normandy on D-Day and struggle to reunite in hostile territory.",
+      "imDbRating": "9.1",
+      "imDbRatingCount": "8272"
+    },
+    {
+      "id": "tt1247463",
+      "seasonNumber": "1",
+      "episodeNumber": "3",
+      "title": "Carentan",
+      "image": "https://imdb-api.com/images/original/MV5BYjU2YzZmODAtNjg4Yy00MTYzLWJjNzQtOWE1YTVlZDBhMTNmXkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_Ratio1.7778_AL_.jpg",
+      "year": "2001",
+      "released": "16 Sep. 2001",
+      "plot": "Easy Company takes on German troops in the French town of Carentan, and the battle takes its toll on one soldier who is badly traumatized by the experience.",
+      "imDbRating": "9.0",
+      "imDbRatingCount": "7487"
+    },
+    {
+      "id": "tt1247467",
+      "seasonNumber": "1",
+      "episodeNumber": "4",
+      "title": "Replacements",
+      "image": "https://imdb-api.com/images/original/MV5BYTg4MGM3NWYtNzcyYS00NjNiLWI3NTQtMzE4NzZkODgxODA3XkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_Ratio1.7778_AL_.jpg",
+      "year": "2001",
+      "released": "23 Sep. 2001",
+      "plot": "With the addition of many new men, Easy Company heads to Holland to participate in Operation Market Garden and prepare an Allied route into Germany, but they meet stiff German resistance.",
+      "imDbRating": "8.8",
+      "imDbRatingCount": "7048"
+    },
+    {
+      "id": "tt1247464",
+      "seasonNumber": "1",
+      "episodeNumber": "5",
+      "title": "Crossroads",
+      "image": "https://imdb-api.com/images/original/MV5BOWQ5MjUzN2EtYmMzMS00MDA2LWJiNWItNzcyN2E0YjgzMDdjXkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_Ratio1.7778_AL_.jpg",
+      "year": "2001",
+      "released": "30 Sep. 2001",
+      "plot": "Winters writes a report on the challenge of an unexpected resistance to a German attack, and is haunted by his conscience after shooting a teenage German SS soldier.",
+      "imDbRating": "8.8",
+      "imDbRatingCount": "6943"
+    },
+    {
+      "id": "tt1247462",
+      "seasonNumber": "1",
+      "episodeNumber": "6",
+      "title": "Bastogne",
+      "image": "https://imdb-api.com/images/original/MV5BOGZlYWYzYzEtYTQ1Ni00NzJmLWEyYjItNzAzNGRhOTI1ZTA1XkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_Ratio1.7778_AL_.jpg",
+      "year": "2001",
+      "released": "7 Oct. 2001",
+      "plot": "In the dead of winter, the men of Easy Company fend off frostbite and hunger - in addition to the enemy - while holding the line in a forest outside of Bastogne. Meanwhile, exhausted medic Eugene Roe finds friendship with a Belgian nurse.",
+      "imDbRating": "9.2",
+      "imDbRatingCount": "7864"
+    },
+    {
+      "id": "tt1247468",
+      "seasonNumber": "1",
+      "episodeNumber": "7",
+      "title": "The Breaking Point",
+      "image": "https://imdb-api.com/images/original/MV5BODIyN2I3MmMtYWNlOC00MzhlLWJmODUtM2Y2MDhkNTkzMjQ1XkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_Ratio1.7778_AL_.jpg",
+      "year": "2001",
+      "released": "14 Oct. 2001",
+      "plot": "Easy Company remains in the Ardennes Forest preparing for an inevitable attack on German forces in the town of Foy. However, morale is low due to cold weather, constant shelling, poor leadership, and numerous casualties.",
+      "imDbRating": "9.4",
+      "imDbRatingCount": "7576"
+    },
+    {
+      "id": "tt1247469",
+      "seasonNumber": "1",
+      "episodeNumber": "8",
+      "title": "The Last Patrol",
+      "image": "https://imdb-api.com/images/original/MV5BZjU2NjI1OGMtMWZkMi00NWYwLTkzMzItNjI4ZDQ4NGQ2YzkzXkEyXkFqcGdeQXVyNzgxMzc3OTc@._V1_Ratio1.7778_AL_.jpg",
+      "year": "2001",
+      "released": "21 Oct. 2001",
+      "plot": "Easy Company is in Hagenau in Feburary 1945, where they prepare for a night patrol mission to capture German prisoners. The patrol includes one veteran who is despised for missing Bastogne and a new lieutenant fresh out of West Point.",
+      "imDbRating": "8.8",
+      "imDbRatingCount": "6394"
+    },
+    {
+      "id": "tt1247470",
+      "seasonNumber": "1",
+      "episodeNumber": "9",
+      "title": "Why We Fight",
+      "image": "https://imdb-api.com/images/original/MV5BNWFjZDgyNTQtNjFkZS00ZTNhLWIzZjItYzNjYjM2N2FlMjkzXkEyXkFqcGdeQXVyNDIzMzcwNjc@._V1_Ratio1.7778_AL_.jpg",
+      "year": "2001",
+      "released": "28 Oct. 2001",
+      "plot": "As the Allies move into Germany and the war comes closer to an end, disillusionment and anger set in for Easy Company - until they stumble onto a concentration camp abandoned by the German military.",
+      "imDbRating": "9.5",
+      "imDbRatingCount": "8363"
+    },
+    {
+      "id": "tt1247466",
+      "seasonNumber": "1",
+      "episodeNumber": "10",
+      "title": "Points",
+      "image": "https://imdb-api.com/images/original/MV5BNDgzM2EyNDctN2E4ZC00MzNmLWExOTEtYTNhMjI5NWM0NmU2XkEyXkFqcGdeQXVyMjk3NTUyOTc@._V1_Ratio1.7778_AL_.jpg",
+      "year": "2001",
+      "released": "4 Nov. 2001",
+      "plot": "As the Germans surrender, it appears that the hard days for Easy Company are over when they are stationed in Austria. However, they soon learn that those soldiers without enough service points will be sent to fight in Japan.",
+      "imDbRating": "9.2",
+      "imDbRatingCount": "6621"
+    }
+  ],
+  "errorMessage": ""
+}

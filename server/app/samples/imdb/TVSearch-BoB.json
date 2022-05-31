@@ -1,0 +1,154 @@
+// https://imdb-api.com/en/API/Title/k_t3qo76kw/tt0185906
+{
+  "id": "tt0185906",
+  "title": "Band of Brothers",
+  "originalTitle": "",
+  "fullTitle": "Band of Brothers (TV Series 2001–2001)",
+  "type": "TVSeries",
+  "year": "2001",
+  "image": "https://imdb-api.com/images/original/MV5BMTI3ODc2ODc0M15BMl5BanBnXkFtZTYwMjgzNjc3._V1_Ratio0.6751_AL_.jpg",
+  "releaseDate": "2001-09-09",
+  "runtimeMins": null,
+  "runtimeStr": null,
+  "plot": "This is the story of \"E\" Easy Company, 506th Regiment of the 101st Airborne Division from their initial training starting in 1942 to the end of World War II. They parachuted behind enemy lines in the early hours of D-Day in support of the landings at Utah beach, participated in the liberation of Carentan and again parachuted into action during Operation Market Garden. They also liberated a concentration camp and were the first to enter Hitler's mountain retreat in Berchtesgaden. A fascinating tale of comradeship that is, in the end, a tale of ordinary men who did extraordinary things.",
+  "plotLocal": "",
+  "plotLocalIsRtl": false,
+  "awards": "Top rated TV #4 | Won 6 Primetime Emmys, 34 wins & 26 nominations total",
+  "directors": "",
+  "directorList": [],
+  "writers": "",
+  "writerList": [],
+  "stars": "Scott Grimes, Damian Lewis, Ron Livingston",
+  "starList": [
+    {
+      "id": "nm0342241",
+      "name": "Scott Grimes"
+    },
+    {
+      "id": "nm0507073",
+      "name": "Damian Lewis"
+    },
+    {
+      "id": "nm0515296",
+      "name": "Ron Livingston"
+    }
+  ],
+  "actorList": [],
+  "fullCast": null,
+  "genres": "Drama, History, War",
+  "genreList": [
+    {
+      "key": "Drama",
+      "value": "Drama"
+    },
+    {
+      "key": "History",
+      "value": "History"
+    },
+    {
+      "key": "War",
+      "value": "War"
+    }
+  ],
+  "companies": "DreamWorks, DreamWorks Television, HBO Films",
+  "companyList": [
+    {
+      "id": "co0040938",
+      "name": "DreamWorks"
+    },
+    {
+      "id": "co0003158",
+      "name": "DreamWorks Television"
+    },
+    {
+      "id": "co0005861",
+      "name": "HBO Films"
+    }
+  ],
+  "countries": "USA, UK",
+  "countryList": [
+    {
+      "key": "USA",
+      "value": "USA"
+    },
+    {
+      "key": "UK",
+      "value": "UK"
+    }
+  ],
+  "languages": "English, Dutch, French, German, Lithuanian",
+  "languageList": [
+    {
+      "key": "English",
+      "value": "English"
+    },
+    {
+      "key": "Dutch",
+      "value": "Dutch"
+    },
+    {
+      "key": "French",
+      "value": "French"
+    },
+    {
+      "key": "German",
+      "value": "German"
+    },
+    {
+      "key": "Lithuanian",
+      "value": "Lithuanian"
+    }
+  ],
+  "contentRating": "TV-MA",
+  "imDbRating": "9.4",
+  "imDbRatingVotes": "442891",
+  "metacriticRating": null,
+  "ratings": null,
+  "wikipedia": null,
+  "posters": null,
+  "images": null,
+  "trailer": null,
+  "boxOffice": {
+    "budget": "",
+    "openingWeekendUSA": "",
+    "grossUSA": "",
+    "cumulativeWorldwideGross": ""
+  },
+  "tagline": "They depended on each other. And the world depended on them.",
+  "keywords": "world war two soldier,military,20th century,1940s,weapon",
+  "keywordList": [
+    "world war two soldier",
+    "military",
+    "20th century",
+    "1940s",
+    "weapon"
+  ],
+  "similars": [],
+  "tvSeriesInfo": {
+    "yearEnd": "2001",
+    "creators": "David Frankel, Mikael Salomon, Stephen Ambrose, Erik Bork",
+    "creatorList": [
+      {
+        "id": "nm0291205",
+        "name": "David Frankel"
+      },
+      {
+        "id": "nm0004121",
+        "name": "Mikael Salomon"
+      },
+      {
+        "id": "nm0024421",
+        "name": "Stephen Ambrose"
+      },
+      {
+        "id": "nm0096897",
+        "name": "Erik Bork"
+      }
+    ],
+    "seasons": [
+      "1"
+    ]
+  },
+  "tvEpisodeInfo": null,
+  "errorMessage": null
+}

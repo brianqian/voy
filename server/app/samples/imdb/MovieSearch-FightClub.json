@@ -1,0 +1,193 @@
+// https://imdb-api.com/en/API/Title/k_t3qo76kw/tt0137523
+{
+  "id": "tt0137523",
+  "title": "Fight Club",
+  "originalTitle": "",
+  "fullTitle": "Fight Club (1999)",
+  "type": "Movie",
+  "year": "1999",
+  "image": "https://imdb-api.com/images/original/MV5BNDIzNDU0YzEtYzE5Ni00ZjlkLTk5ZjgtNjM3NWE4YzA3Nzk3XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_Ratio0.6751_AL_.jpg",
+  "releaseDate": "1999-10-15",
+  "runtimeMins": "139",
+  "runtimeStr": "2h 19min",
+  "plot": "A nameless first person narrator (Edward Norton) attends support groups in attempt to subdue his emotional state and relieve his insomniac state. When he meets Marla (Helena Bonham Carter), another fake attendee of support groups, his life seems to become a little more bearable. However when he associates himself with Tyler (Brad Pitt) he is dragged into an underground fight club and soap making scheme. Together the two men spiral out of control and engage in competitive rivalry for love and power.",
+  "plotLocal": "",
+  "plotLocalIsRtl": false,
+  "awards": "Top rated movie #12 | Nominated for 1 Oscar, 11 wins & 38 nominations total",
+  "directors": "David Fincher",
+  "directorList": [
+    {
+      "id": "nm0000399",
+      "name": "David Fincher"
+    }
+  ],
+  "writers": "Chuck Palahniuk, Jim Uhls",
+  "writerList": [
+    {
+      "id": "nm0657333",
+      "name": "Chuck Palahniuk"
+    },
+    {
+      "id": "nm0880243",
+      "name": "Jim Uhls"
+    }
+  ],
+  "stars": "Brad Pitt, Edward Norton, Meat Loaf",
+  "starList": [
+    {
+      "id": "nm0000093",
+      "name": "Brad Pitt"
+    },
+    {
+      "id": "nm0001570",
+      "name": "Edward Norton"
+    },
+    {
+      "id": "nm0001533",
+      "name": "Meat Loaf"
+    }
+  ],
+  "actorList": [],
+  "fullCast": null,
+  "genres": "Drama",
+  "genreList": [
+    {
+      "key": "Drama",
+      "value": "Drama"
+    }
+  ],
+  "companies": "Fox 2000 Pictures, New Regency Productions, Linson Films",
+  "companyList": [
+    {
+      "id": "co0017497",
+      "name": "Fox 2000 Pictures"
+    },
+    {
+      "id": "co0007127",
+      "name": "New Regency Productions"
+    },
+    {
+      "id": "co0038102",
+      "name": "Linson Films"
+    }
+  ],
+  "countries": "USA, Germany",
+  "countryList": [
+    {
+      "key": "USA",
+      "value": "USA"
+    },
+    {
+      "key": "Germany",
+      "value": "Germany"
+    }
+  ],
+  "languages": "English",
+  "languageList": [
+    {
+      "key": "English",
+      "value": "English"
+    }
+  ],
+  "contentRating": "R",
+  "imDbRating": "8.8",
+  "imDbRatingVotes": "2038780",
+  "metacriticRating": "66",
+  "ratings": null,
+  "wikipedia": null,
+  "posters": null,
+  "images": null,
+  "trailer": null,
+  "boxOffice": {
+    "budget": "$63,000,000 (estimated)",
+    "openingWeekendUSA": "$11,035,485",
+    "grossUSA": "$37,030,102",
+    "cumulativeWorldwideGross": "$101,209,702"
+  },
+  "tagline": "How much can you know about yourself if you've never been in a fight?",
+  "keywords": "surprise ending,anti establishment,insomnia,multiple personality disorder,based on novel",
+  "keywordList": [
+    "surprise ending",
+    "anti establishment",
+    "insomnia",
+    "multiple personality disorder",
+    "based on novel"
+  ],
+  "similars": [
+    {
+      "id": "tt1375666",
+      "title": "Inception",
+      "image": "https://imdb-api.com/images/original/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6763_AL_.jpg",
+      "imDbRating": "8.8"
+    },
+    {
+      "id": "tt0110912",
+      "title": "Pulp Fiction",
+      "image": "https://imdb-api.com/images/original/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6860_AL_.jpg",
+      "imDbRating": "8.9"
+    },
+    {
+      "id": "tt0114369",
+      "title": "Se7en",
+      "image": "https://imdb-api.com/images/original/MV5BOTUwODM5MTctZjczMi00OTk4LTg3NWUtNmVhMTAzNTNjYjcyXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_Ratio0.6763_AL_.jpg",
+      "imDbRating": "8.6"
+    },
+    {
+      "id": "tt0109830",
+      "title": "Forrest Gump",
+      "image": "https://imdb-api.com/images/original/MV5BNWIwODRlZTUtY2U3ZS00Yzg1LWJhNzYtMmZiYmEyNmU1NjMzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_Ratio0.6957_AL_.jpg",
+      "imDbRating": "8.8"
+    },
+    {
+      "id": "tt0111161",
+      "title": "The Shawshank Redemption",
+      "image": "https://imdb-api.com/images/original/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_Ratio0.6763_AL_.jpg",
+      "imDbRating": "9.3"
+    },
+    {
+      "id": "tt0816692",
+      "title": "Interstellar",
+      "image": "https://imdb-api.com/images/original/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_Ratio0.6763_AL_.jpg",
+      "imDbRating": "8.6"
+    },
+    {
+      "id": "tt0468569",
+      "title": "The Dark Knight",
+      "image": "https://imdb-api.com/images/original/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_Ratio0.6763_AL_.jpg",
+      "imDbRating": "9.0"
+    },
+    {
+      "id": "tt0133093",
+      "title": "The Matrix",
+      "image": "https://imdb-api.com/images/original/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_Ratio0.6763_AL_.jpg",
+      "imDbRating": "8.7"
+    },
+    {
+      "id": "tt0167260",
+      "title": "The Lord of the Rings: The Return of the King",
+      "image": "https://imdb-api.com/images/original/MV5BNzA5ZDNlZWMtM2NhNS00NDJjLTk4NDItYTRmY2EwMWZlMTY3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.6763_AL_.jpg",
+      "imDbRating": "9.0"
+    },
+    {
+      "id": "tt0102926",
+      "title": "The Silence of the Lambs",
+      "image": "https://imdb-api.com/images/original/MV5BNjNhZTk0ZmEtNjJhMi00YzFlLWE1MmEtYzM1M2ZmMGMwMTU4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_Ratio0.6763_AL_.jpg",
+      "imDbRating": "8.6"
+    },
+    {
+      "id": "tt1853728",
+      "title": "Django Unchained",
+      "image": "https://imdb-api.com/images/original/MV5BMjIyNTQ5NjQ1OV5BMl5BanBnXkFtZTcwODg1MDU4OA@@._V1_Ratio0.6763_AL_.jpg",
+      "imDbRating": "8.4"
+    },
+    {
+      "id": "tt7286456",
+      "title": "Joker",
+      "image": "https://imdb-api.com/images/original/MV5BNGVjNWI4ZGUtNzE0MS00YTJmLWE0ZDctN2ZiYTk2YmI3NTYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_Ratio0.6763_AL_.jpg",
+      "imDbRating": "8.4"
+    }
+  ],
+  "tvSeriesInfo": null,
+  "tvEpisodeInfo": null,
+  "errorMessage": null
+}

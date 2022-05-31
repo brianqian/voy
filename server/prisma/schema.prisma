@@ -15,23 +15,134 @@ datasource db {
 model User {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   email     String   @unique
   password  String
-  name      String?
-  role      Role     @default(USER)
+  firstName String?
+  lastName  String?
 }
 
 model UserMediaList {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-enum Role {
-  USER
-  ADMIN
+model Person {
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  firstName     String
+  lastName      String
+  Person_Awards Person_Awards[]
 }
 
-enum MediaType {
-  MOVIE
-  TELEVISION
+model Movie {
+  id                String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  imdbId            String
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  title             String
+  originalTitle     String?
+  fullTitle         String?
+  releaseDate       DateTime
+  runtimeMins       Int
+  overview          String
+  alternateOverview String
+  tagline           String?
+  mpaaRating        MPAARating
+  imdbRating        Int
+  imdbVoteCount     Int?
+  rating            Int
+  ratingVoteCount   Int
+
+  MovieGenre Movie_Genre[]
+}
+
+model TVShow {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  imdbId            String
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  title             String // series title
+  originalTitle     String?
+  fullTitle         String?
+  type              String // miniseries, etc
+  releaseDate       DateTime
+  endDate           DateTime?
+  runtimeMins       Int
+  overview          String
+  alternateOverview String
+  tagline           String?
+  imdbRating        Int
+  imdbVoteCount     Int?
+  rating            Int
+  ratingVoteCount   Int
+  airTime           String
+
+  TVGenre     TV_Genre[]
+  TV_Episodes TV_Episodes[]
+}
+
+model Award {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  result    String // won, nominated
+  awardType String // oscars, golden globe, etc
+  category  String // Best actor, actress,
+  year      Int
+
+  Person_Awards Person_Awards[]
+}
+
+// #JOIN TABLES
+
+model Movie_Genre {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tmdbId    Int
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  movieId   String
+  genre     String
+
+  @@id([genre, movieId])
+}
+
+model TV_Genre {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tmdbId    Int
+  tvShow    TVShow   @relation(fields: [tvShowId], references: [id])
+  tvShowId  String
+  genre     String
+
+  @@id([genre, tvShowId])
+}
+
+model TV_Episodes {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tvShow    TVShow   @relation(fields: [tvShowId], references: [id])
+  tvShowId  String
+}
+
+model Person_Awards {
+  person   Person @relation(fields: [personId], references: [id])
+  personId String
+  award    Award  @relation(fields: [awardId], references: [id])
+  awardId  String
+
+  @@id([personId, awardId])
+}
+
+// #ENUMS
+
+enum MPAARating {
+  G
+  PG
+  PG13
+  R
+  NC17
 }

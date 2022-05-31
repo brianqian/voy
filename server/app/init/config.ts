@@ -1,13 +1,10 @@
+import { assertPresent } from '../lib/helpers';
+
 const config = {
-  IMDB_API_KEY: process.env.IMDB_API_KEY,
+  IMDB_API_KEY: assertPresent(process.env.IMDB_API_KEY),
+  TMDB_API_KEY: assertPresent(process.env.TMDB_API_KEY),
 };
 
-Object.keys(config).forEach((key) => {
-  const castedKey = key as keyof typeof config;
-  if (config[castedKey] === undefined) {
-    throw new Error(`env var missing for ${key}`);
-  }
-});
 console.log('Config loaded');
 
 export default config;
