@@ -29,55 +29,63 @@ model UserMediaList {
 }
 
 model Person {
-  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  firstName     String
-  lastName      String
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  firstName String
+  lastName  String
+  suffix    String?
+  imdbId    String?
+  birthDate DateTime?
+
   Person_Awards Person_Awards[]
+  Movie_Cast    Movie_Cast[]
 }
 
 model Movie {
   id                String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  imdbId            String
+  imdbId            String?
+  tmdbId            String?
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
   title             String
   originalTitle     String?
   fullTitle         String?
-  releaseDate       DateTime
-  runtimeMins       Int
-  overview          String
-  alternateOverview String
+  releaseDate       DateTime?
+  runtimeMins       Int?
+  overview          String?
+  alternateOverview String?
   tagline           String?
   mpaaRating        MPAARating
-  imdbRating        Int
+  imdbRating        Int?
   imdbVoteCount     Int?
-  rating            Int
-  ratingVoteCount   Int
+  rating            Int        @default(0)
+  ratingVoteCount   Int        @default(0)
 
   MovieGenre Movie_Genre[]
+  Movie_Cast Movie_Cast[]
 }
 
 model TVShow {
   id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  imdbId            String
+  imdbId            String?
+  tmdbId            String?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   title             String // series title
   originalTitle     String?
   fullTitle         String?
-  type              String // miniseries, etc
-  releaseDate       DateTime
+  type              String    @default("TV Show") // miniseries, etc
+  releaseDate       DateTime?
   endDate           DateTime?
-  runtimeMins       Int
-  overview          String
-  alternateOverview String
+  runtimeMins       Int?
+  overview          String?
+  alternateOverview String?
   tagline           String?
-  imdbRating        Int
+  imdbRating        Int?
   imdbVoteCount     Int?
-  rating            Int
-  ratingVoteCount   Int
+  rating            Int       @default(0)
+  ratingVoteCount   Int       @default(0)
   airTime           String
 
   TVGenre     TV_Genre[]
@@ -101,7 +109,6 @@ model Award {
 model Movie_Genre {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tmdbId    Int
   movie     Movie    @relation(fields: [movieId], references: [id])
   movieId   String
   genre     String
@@ -109,10 +116,20 @@ model Movie_Genre {
   @@id([genre, movieId])
 }
 
+model Movie_Cast {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  movieId   String
+  person    Person   @relation(fields: [personId], references: [id])
+  personId  String
+  role      CastRole
+}
+
 model TV_Genre {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tmdbId    Int
   tvShow    TVShow   @relation(fields: [tvShowId], references: [id])
   tvShowId  String
   genre     String
@@ -145,4 +162,13 @@ enum MPAARating {
   PG13
   R
   NC17
+}
+
+enum CastRole {
+  WRITER
+  DIRECTOR
+  ACTOR
+  PRODUCER
+  EXECUTIVE_PRODUCER
+
 }
