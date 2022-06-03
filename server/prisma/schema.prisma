@@ -9,7 +9,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-
 }
 
 model User {
@@ -20,12 +19,9 @@ model User {
   password  String
   firstName String?
   lastName  String?
-}
 
-model UserMediaList {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  User_List    User_List[]
+  User_Ratings User_Ratings[]
 }
 
 model Person {
@@ -33,13 +29,15 @@ model Person {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   firstName String
-  lastName  String
+  lastName  String?
   suffix    String?
   imdbId    String?
+  tmdbId    String?
   birthDate DateTime?
+  deathDate DateTime?
 
-  Person_Awards Person_Awards[]
-  Movie_Cast    Movie_Cast[]
+  Movie_Cast Movie_Cast[]
+  TV_Cast    TV_Cast[]
 }
 
 model Movie {
@@ -59,37 +57,75 @@ model Movie {
   mpaaRating        MPAARating
   imdbRating        Int?
   imdbVoteCount     Int?
-  rating            Int        @default(0)
-  ratingVoteCount   Int        @default(0)
+  metacriticRating  Int
+  rating            Int        @default(0) // these should be calculated instead of stored values?
+  ratingVoteCount   Int        @default(0) // these should be calculated instead of stored values?
 
-  MovieGenre Movie_Genre[]
-  Movie_Cast Movie_Cast[]
+  Movie_Cast     Movie_Cast[]
+  MoviesListItem MoviesListItem[]
+  User_Ratings   User_Ratings[]
+  Genre          Genre[]
 }
 
 model TVShow {
-  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  imdbId            String?
-  tmdbId            String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  title             String // series title
-  originalTitle     String?
-  fullTitle         String?
-  type              String    @default("TV Show") // miniseries, etc
-  releaseDate       DateTime?
-  endDate           DateTime?
-  runtimeMins       Int?
-  overview          String?
-  alternateOverview String?
-  tagline           String?
-  imdbRating        Int?
-  imdbVoteCount     Int?
-  rating            Int       @default(0)
-  ratingVoteCount   Int       @default(0)
-  airTime           String
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  imdbId               String?
+  tmdbId               String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  title                String // series title
+  originalTitle        String?
+  fullTitle            String?
+  type                 String    @default("TV Show") // miniseries, etc
+  releaseDate          DateTime?
+  endDate              DateTime?
+  runtimeMins          Int?
+  overview             String?
+  alternateOverview    String?
+  tagline              String?
+  imdbRating           Int?
+  imdbVoteCount        Int?
+  rating               Int       @default(0) // these should be calculated instead of stored values?
+  ratingVoteCount      Int       @default(0) // these should be calculated instead of stored values?
+  airTime              String
+  nextScheduledAirtime DateTime
 
-  TVGenre     TV_Genre[]
-  TV_Episodes TV_Episodes[]
+  TV_Episodes     TVEpisodes[]
+  TV_Cast         TV_Cast[]
+  TVShowsListItem TVShowsListItem[]
+  TV_On_Network   TV_On_Network[]
+  User_Ratings    User_Ratings[]
+  Genre           Genre[]
+
+}
+
+model ProductionCompany {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tmdbId    String
+  imdbId    String
+  name      String
+
+}
+
+model Studio {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tmdbId    String
+  imdbId    String
+  name      String
+}
+
+model Network {
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  tmdbId        String
+  imdbId        String
+  name          String
+  TV_On_Network TV_On_Network[]
 }
 
 model Award {
@@ -101,57 +137,119 @@ model Award {
   category  String // Best actor, actress,
   year      Int
 
-  Person_Awards Person_Awards[]
+}
+
+model MoviesListItem {
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  movie      Movie     @relation(fields: [movieId], references: [id])
+  movieId    String    @db.Uuid
+  userList   User_List @relation(fields: [userListId], references: [id])
+  userListId String    @db.Uuid
+
+  @@id([movieId, userListId])
+}
+
+model TVShowsListItem {
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  tvShow     TVShow    @relation(fields: [tvShowId], references: [id])
+  tvShowId   String    @db.Uuid
+  userList   User_List @relation(fields: [userListId], references: [id])
+  userListId String    @db.Uuid
+
+
+  @@id([tvShowId, userListId])
+}
+
+model TVEpisodes {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tvShow    TVShow   @relation(fields: [tvShowId], references: [id])
+  tvShowId  String   @db.Uuid
+  season    Int
+
+  TV_Cast TV_Cast[]
 }
 
 // #JOIN TABLES
 
-model Movie_Genre {
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  movie     Movie    @relation(fields: [movieId], references: [id])
-  movieId   String
-  genre     String
-
-  @@id([genre, movieId])
-}
-
 model Movie_Cast {
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  movie         Movie    @relation(fields: [movieId], references: [id])
+  movieId       String   @db.Uuid
+  person        Person   @relation(fields: [personId], references: [id])
+  personId      String   @db.Uuid
+  role          CastRole
+  characterName String?
+
+  @@id([personId, movieId, role])
+}
+
+model TV_Cast {
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  tvEpisode     TVEpisodes @relation(fields: [tvEpisodeId], references: [id])
+  tvEpisodeId   String     @db.Uuid
+  person        Person     @relation(fields: [personId], references: [id])
+  personId      String     @db.Uuid
+  role          CastRole
+  characterName String?
+  TVShow        TVShow?    @relation(fields: [tvShowId], references: [id])
+  tvShowId      String?    @db.Uuid
+
+  @@id([personId, tvEpisodeId, role])
+}
+
+model Genre {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  movie     Movie    @relation(fields: [movieId], references: [id])
-  movieId   String
-  person    Person   @relation(fields: [personId], references: [id])
-  personId  String
-  role      CastRole
-}
-
-model TV_Genre {
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  tvShow    TVShow   @relation(fields: [tvShowId], references: [id])
-  tvShowId  String
   genre     String
+  tvShow    TVShow?  @relation(fields: [tvShowId], references: [id])
+  tvShowId  String?  @db.Uuid
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  movieId   String?  @db.Uuid
 
-  @@id([genre, tvShowId])
 }
 
-model TV_Episodes {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+model User_List {
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String            @db.Uuid
+  listTitle       String
+  MoviesListItem  MoviesListItem[]
+  TVShowsListItem TVShowsListItem[]
+  type            TVOrMovie
+}
+
+model TV_On_Network {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   tvShow    TVShow   @relation(fields: [tvShowId], references: [id])
-  tvShowId  String
+  tvShowId  String   @db.Uuid
+  network   Network  @relation(fields: [networkId], references: [id])
+  networkId String   @db.Uuid
+
+  @@id([tvShowId, networkId])
 }
 
-model Person_Awards {
-  person   Person @relation(fields: [personId], references: [id])
-  personId String
-  award    Award  @relation(fields: [awardId], references: [id])
-  awardId  String
+model User_Ratings {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.Uuid
+  rating    Int // 0-20 scale (add constraint)
+  tvShow    TVShow?  @relation(fields: [tvShowId], references: [id])
+  tvShowId  String?  @db.Uuid
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  movieId   String?  @db.Uuid
 
-  @@id([personId, awardId])
 }
 
 // #ENUMS
@@ -170,5 +268,9 @@ enum CastRole {
   ACTOR
   PRODUCER
   EXECUTIVE_PRODUCER
+}
 
+enum TVOrMovie {
+  TV
+  MOVIE
 }
