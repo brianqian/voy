@@ -45,10 +45,12 @@ CREATE TABLE "person" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "firstName" TEXT NOT NULL,
+    "middleName" TEXT,
     "lastName" TEXT,
     "suffix" TEXT,
     "imdbId" TEXT,
     "tmdbId" TEXT,
+    "tmdbPopularity" REAL,
     "birthDate" TIMESTAMP(3),
     "deathDate" TIMESTAMP(3),
 
@@ -60,6 +62,7 @@ CREATE TABLE "movie" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "imdbId" TEXT,
     "tmdbId" TEXT,
+    "tmdbPopularity" REAL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "title" TEXT NOT NULL,
@@ -74,7 +77,8 @@ CREATE TABLE "movie" (
     "mpaaRating" "MPAARating" NOT NULL,
     "imdbRating" INTEGER,
     "imdbVoteCount" INTEGER,
-    "metacriticRating" INTEGER NOT NULL,
+    "metacriticRating" INTEGER,
+    "rtRating" INTEGER,
 
     CONSTRAINT "movie_pkey" PRIMARY KEY ("id")
 );
@@ -84,6 +88,7 @@ CREATE TABLE "tv_show" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "imdbId" TEXT,
     "tmdbId" TEXT,
+    "tmdbPopularity" REAL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "title" TEXT NOT NULL,
@@ -111,7 +116,7 @@ CREATE TABLE "production_company" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "tmdbId" TEXT,
-    "imdbId" TEXT NOT NULL,
+    "imdbId" TEXT,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "production_company_pkey" PRIMARY KEY ("id")
@@ -123,7 +128,7 @@ CREATE TABLE "network" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "tmdbId" TEXT,
-    "imdbId" TEXT NOT NULL,
+    "imdbId" TEXT,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "network_pkey" PRIMARY KEY ("id")
@@ -156,10 +161,10 @@ CREATE TABLE "movie_list_item" (
 CREATE TABLE "tv_show_list_item" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "tvShowId" UUID NOT NULL,
+    "tvSeriesId" UUID NOT NULL,
     "userListId" UUID NOT NULL,
 
-    CONSTRAINT "tv_show_list_item_pkey" PRIMARY KEY ("tvShowId","userListId")
+    CONSTRAINT "tv_show_list_item_pkey" PRIMARY KEY ("tvSeriesId","userListId")
 );
 
 -- CreateTable
@@ -167,8 +172,12 @@ CREATE TABLE "tv_episode" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "tvShowId" UUID NOT NULL,
+    "tvSeriesId" UUID NOT NULL,
     "season" INTEGER NOT NULL,
+    "tmdbId" TEXT NOT NULL,
+    "imdbRating" INTEGER,
+    "metacriticRating" INTEGER,
+    "imdbVoteCount" INTEGER,
 
     CONSTRAINT "tv_episode_pkey" PRIMARY KEY ("id")
 );
@@ -193,7 +202,7 @@ CREATE TABLE "tv_casts" (
     "personId" UUID NOT NULL,
     "role" "CastRole" NOT NULL,
     "characterName" TEXT,
-    "tvShowId" UUID NOT NULL,
+    "tvSeriesId" UUID NOT NULL,
 
     CONSTRAINT "tv_casts_pkey" PRIMARY KEY ("personId","tvEpisodeId","role")
 );
@@ -204,7 +213,7 @@ CREATE TABLE "media_genres" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "genre" TEXT NOT NULL,
-    "tvShowId" UUID,
+    "tvSeriesId" UUID,
     "movieId" UUID,
 
     CONSTRAINT "media_genres_pkey" PRIMARY KEY ("id")
@@ -223,13 +232,13 @@ CREATE TABLE "users_lists" (
 );
 
 -- CreateTable
-CREATE TABLE "tv_shows_networks" (
+CREATE TABLE "tv_series_networks" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "tvShowId" UUID NOT NULL,
+    "tvSeriesId" UUID NOT NULL,
     "networkId" UUID NOT NULL,
 
-    CONSTRAINT "tv_shows_networks_pkey" PRIMARY KEY ("tvShowId","networkId")
+    CONSTRAINT "tv_series_networks_pkey" PRIMARY KEY ("tvSeriesId","networkId")
 );
 
 -- CreateTable
@@ -237,9 +246,9 @@ CREATE TABLE "users_ratings" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "userId" UUID NOT NULL,
     "rating" INTEGER NOT NULL,
-    "tvShowId" UUID,
+    "userId" UUID NOT NULL,
+    "tvSeriesId" UUID,
     "movieId" UUID,
 
     CONSTRAINT "users_ratings_pkey" PRIMARY KEY ("id")
@@ -249,7 +258,7 @@ CREATE TABLE "users_ratings" (
 CREATE TABLE "media_awards" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "awardId" UUID NOT NULL,
-    "tvShowId" UUID,
+    "tvSeriesId" UUID,
     "tvEpisodeId" UUID,
     "movieId" UUID,
 
@@ -262,7 +271,7 @@ CREATE TABLE "media_production_companies" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "companyId" UUID NOT NULL,
-    "tvShowId" UUID,
+    "tvSeriesId" UUID,
     "movieId" UUID,
 
     CONSTRAINT "media_production_companies_pkey" PRIMARY KEY ("id")
@@ -278,13 +287,13 @@ ALTER TABLE "movie_list_item" ADD CONSTRAINT "movie_list_item_movieId_fkey" FORE
 ALTER TABLE "movie_list_item" ADD CONSTRAINT "movie_list_item_userListId_fkey" FOREIGN KEY ("userListId") REFERENCES "users_lists"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tv_show_list_item" ADD CONSTRAINT "tv_show_list_item_tvShowId_fkey" FOREIGN KEY ("tvShowId") REFERENCES "tv_show"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tv_show_list_item" ADD CONSTRAINT "tv_show_list_item_tvSeriesId_fkey" FOREIGN KEY ("tvSeriesId") REFERENCES "tv_show"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "tv_show_list_item" ADD CONSTRAINT "tv_show_list_item_userListId_fkey" FOREIGN KEY ("userListId") REFERENCES "users_lists"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tv_episode" ADD CONSTRAINT "tv_episode_tvShowId_fkey" FOREIGN KEY ("tvShowId") REFERENCES "tv_show"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tv_episode" ADD CONSTRAINT "tv_episode_tvSeriesId_fkey" FOREIGN KEY ("tvSeriesId") REFERENCES "tv_show"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "movies_casts" ADD CONSTRAINT "movies_casts_personId_fkey" FOREIGN KEY ("personId") REFERENCES "person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -296,7 +305,7 @@ ALTER TABLE "movies_casts" ADD CONSTRAINT "movies_casts_movieId_fkey" FOREIGN KE
 ALTER TABLE "tv_casts" ADD CONSTRAINT "tv_casts_personId_fkey" FOREIGN KEY ("personId") REFERENCES "person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tv_casts" ADD CONSTRAINT "tv_casts_tvShowId_fkey" FOREIGN KEY ("tvShowId") REFERENCES "tv_show"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tv_casts" ADD CONSTRAINT "tv_casts_tvSeriesId_fkey" FOREIGN KEY ("tvSeriesId") REFERENCES "tv_show"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "tv_casts" ADD CONSTRAINT "tv_casts_tvEpisodeId_fkey" FOREIGN KEY ("tvEpisodeId") REFERENCES "tv_episode"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -305,16 +314,16 @@ ALTER TABLE "tv_casts" ADD CONSTRAINT "tv_casts_tvEpisodeId_fkey" FOREIGN KEY ("
 ALTER TABLE "media_genres" ADD CONSTRAINT "media_genres_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "movie"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "media_genres" ADD CONSTRAINT "media_genres_tvShowId_fkey" FOREIGN KEY ("tvShowId") REFERENCES "tv_show"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "media_genres" ADD CONSTRAINT "media_genres_tvSeriesId_fkey" FOREIGN KEY ("tvSeriesId") REFERENCES "tv_show"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "users_lists" ADD CONSTRAINT "users_lists_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tv_shows_networks" ADD CONSTRAINT "tv_shows_networks_tvShowId_fkey" FOREIGN KEY ("tvShowId") REFERENCES "tv_show"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tv_series_networks" ADD CONSTRAINT "tv_series_networks_tvSeriesId_fkey" FOREIGN KEY ("tvSeriesId") REFERENCES "tv_show"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tv_shows_networks" ADD CONSTRAINT "tv_shows_networks_networkId_fkey" FOREIGN KEY ("networkId") REFERENCES "network"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "tv_series_networks" ADD CONSTRAINT "tv_series_networks_networkId_fkey" FOREIGN KEY ("networkId") REFERENCES "network"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "users_ratings" ADD CONSTRAINT "users_ratings_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -323,13 +332,13 @@ ALTER TABLE "users_ratings" ADD CONSTRAINT "users_ratings_userId_fkey" FOREIGN K
 ALTER TABLE "users_ratings" ADD CONSTRAINT "users_ratings_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "movie"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "users_ratings" ADD CONSTRAINT "users_ratings_tvShowId_fkey" FOREIGN KEY ("tvShowId") REFERENCES "tv_show"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "users_ratings" ADD CONSTRAINT "users_ratings_tvSeriesId_fkey" FOREIGN KEY ("tvSeriesId") REFERENCES "tv_show"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "media_awards" ADD CONSTRAINT "media_awards_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "movie"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "media_awards" ADD CONSTRAINT "media_awards_tvShowId_fkey" FOREIGN KEY ("tvShowId") REFERENCES "tv_show"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "media_awards" ADD CONSTRAINT "media_awards_tvSeriesId_fkey" FOREIGN KEY ("tvSeriesId") REFERENCES "tv_show"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "media_awards" ADD CONSTRAINT "media_awards_awardId_fkey" FOREIGN KEY ("awardId") REFERENCES "award"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -341,7 +350,7 @@ ALTER TABLE "media_awards" ADD CONSTRAINT "media_awards_tvEpisodeId_fkey" FOREIG
 ALTER TABLE "media_production_companies" ADD CONSTRAINT "media_production_companies_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "movie"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "media_production_companies" ADD CONSTRAINT "media_production_companies_tvShowId_fkey" FOREIGN KEY ("tvShowId") REFERENCES "tv_show"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "media_production_companies" ADD CONSTRAINT "media_production_companies_tvSeriesId_fkey" FOREIGN KEY ("tvSeriesId") REFERENCES "tv_show"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "media_production_companies" ADD CONSTRAINT "media_production_companies_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "production_company"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
