@@ -1,5 +1,5 @@
-import { SearchEndpoints, SearchMethod, searchMethods } from './search';
-import { infoMethods } from './title';
+import { SearchEndpoints, SearchMethod, searchMethods } from './search.js';
+import { infoMethods } from './title.js';
 class ImdbApi {
   search: Record<SearchEndpoints, SearchMethod>;
   info: typeof infoMethods;
