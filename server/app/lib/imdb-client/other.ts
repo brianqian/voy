@@ -21,7 +21,7 @@ const otherEndpoints = [
   'YouTubePlaylist',
 ] as const;
 
-type otherEndpoints = typeof otherEndpoints[number];
+type OtherEndpoints = typeof otherEndpoints[number];
 
 type NameId = `nn${string}`;
 type CompanyId = `co${string}`;

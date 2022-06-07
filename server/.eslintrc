@@ -30,7 +30,13 @@
         "alwaysTryTypes": true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
         // Choose from one of the "project" configs below or omit to use <root>/tsconfig.json by default
         // use <root>/path/to/folder/tsconfig.json
-        "project": "./tsconfig.json"
+        "project": "./tsconfig.json",
+        "node": {
+          "extensions": [
+            ".js",
+            ".ts"
+          ]
+        }
       }
     }
   },
@@ -41,6 +47,7 @@
     "comma-dangle": "off",
     "no-underscore-dangle": "off",
     "no-unused-vars": "off",
+    "lines-between-class-members": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/comma-dangle": [
       "off"
@@ -55,6 +62,7 @@
         "ts": "never"
       }
     ],
+    "unused-imports/no-unused-imports": "error",
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
@@ -62,7 +70,6 @@
         "varsIgnorePattern": "^_"
       }
     ],
-    "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "warn",
       {
