@@ -1,6 +1,6 @@
 import got from 'got';
 import Bourne from '@hapi/bourne';
-import { SearchData } from '../../../@types/imdb-api';
+import { SearchData } from '../../../types/imdb-api';
 import config from '../../init/config.js';
 
 const BASE_PATH = 'https://imdb-api.com/api';

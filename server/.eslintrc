@@ -3,8 +3,7 @@
     "node": true
   },
   "extends": [
-    "airbnb-base",
-    "airbnb-typescript/base"
+    "airbnb-base"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -13,6 +12,7 @@
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "import",
+    "unused-imports",
     "@typescript-eslint"
   ],
   "parserOptions": {
@@ -36,12 +36,11 @@
   },
   "rules": {
     "no-console": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        "argsIgnorePattern": "^_"
-      }
-    ],
+    "no-redeclare": "off",
+    "max-len": "off",
+    "comma-dangle": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-vars": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/comma-dangle": [
       "off"
@@ -49,10 +48,29 @@
     "@typescript-eslint/lines-between-class-members": "off",
     "arrow-body-style": "off",
     "import/prefer-default-export": "off",
-    "comma-dangle": "off",
     "import/extensions": [
       "error",
-      "always"
+      "ignorePackages",
+      {
+        "ts": "never"
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
     ]
   }
 }
