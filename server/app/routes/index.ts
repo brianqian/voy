@@ -1,13 +1,12 @@
-import Router from '@koa/router';
-import exampleRouter from './example/example-routes.js';
-import { imdbApi } from '../lib/imdb-client/index.js';
+import express, { Request, Response } from 'express';
+import authRoutes from './auth.routes';
 
-const router = new Router();
+const router = express.Router();
 
-router.get('/', async (ctx, next) => {
-  const result = await imdbApi.search.movie('avatar');
-  console.log(result);
-  return;
+router.use('/auth', authRoutes);
+
+router.get('/ping', (req: Request, res: Response) => {
+  console.log('pong');
 });
 
-export { exampleRouter, router as rootRouter };
+export default router;

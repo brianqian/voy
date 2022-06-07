@@ -1,5 +1,5 @@
 import { MovieDb } from 'moviedb-promise';
-import config from '../../init/config';
+import config from '../../init/config.js';
 
 const TMDB_API_KEY = config.TMDB_API_KEY;
 const moviedb = new MovieDb(TMDB_API_KEY);
