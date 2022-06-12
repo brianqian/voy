@@ -1,4 +1,3 @@
-/* eslint-disable import/no-duplicates */
 import chalk from 'chalk';
 import { assert } from '@sindresorhus/is';
 import { format, sub } from 'date-fns';
@@ -6,40 +5,18 @@ import got from 'got';
 import Chain from 'stream-chain';
 import StreamValues from 'stream-json/streamers/StreamValues.js';
 import zlib from 'zlib';
-import prisma from '../../lib/prisma-client/index.js';
+import { CategoryName, ExportLineItem, isTvOrMovieItem } from 'app/services/tmdb/types.js';
+import prisma from 'app/lib/prisma-client/index.js';
+import { logger } from 'app/lib/logger/index.js';
 
 const ROOT_PATH = 'http://files.tmdb.org/p/exports/';
-export const TMDB_EXPORT_CATEGORIES = [
-  'tv_network', // 1 - smallest -- name
-  'production_company', // 2 -- name
-  'tv_series', // 3 -- original_name
-  'movie', // 4 -- original_name
-  'person', // 5 - largest -- name
-  // 'collection',
-  // 'keyword',
-] as const;
-type CategoryName = typeof TMDB_EXPORT_CATEGORIES[number];
-interface TVOrMovieItem {
-  id: number;
-  original_name: string;
-}
-
-interface NonTVOrMovieItem {
-  id: number;
-  name: string;
-}
-type ExportLineItem = TVOrMovieItem | NonTVOrMovieItem;
-
-const isTvOrMovieItem = (item: ExportLineItem): item is TVOrMovieItem => {
-  return 'original_name' in item;
-};
 
 const getFullPath = (category: CategoryName) => {
   const yesterday = format(sub(new Date(), { days: 1 }), 'MM_dd_yyyy');
   return `${ROOT_PATH}${category}_ids_${yesterday}.json.gz`;
 };
 
-const insertDailyIntoDb = async (item: ExportLineItem, category: CategoryName) => {
+async function insertDailyIntoDb(item: ExportLineItem, category: CategoryName): Promise<number> {
   const { id } = item;
   const name = isTvOrMovieItem(item) ? item.original_name : item.name;
   if (!name || !id) {
@@ -49,9 +26,10 @@ const insertDailyIntoDb = async (item: ExportLineItem, category: CategoryName) =
   assert.number(id);
   assert.string(name);
   const tmdbId = id.toString();
+  // const tableName = getTableFromCategory(category);
   switch (category) {
     case 'tv_series': {
-      await prisma.tVSeries.upsert({
+      await prisma.tvSeries.upsert({
         where: { tmdbId },
         update: { tmdbId, originalTitle: name },
         create: { tmdbId, originalTitle: name },
@@ -93,9 +71,9 @@ const insertDailyIntoDb = async (item: ExportLineItem, category: CategoryName) =
     default:
       throw new Error(`Invalid Category Name: ${category}`);
   }
-};
+}
 
-export const importTmdbDaily = async (category: CategoryName) => {
+export async function importTmdbDaily(category: CategoryName) {
   const downloadStream = got.stream(getFullPath(category));
 
   downloadStream.on('downloadProgress', (progress) => {
@@ -128,6 +106,9 @@ export const importTmdbDaily = async (category: CategoryName) => {
     console.log(
       `${chalk.blue(category)} import complete. ${recordCount}/${totalCount} records imported`
     );
-    console.log(`Errors: ${errors.length}`);
+    if (errors.length > 0) {
+      logger.warn(` ${errors.length} errors found during ${category} import`);
+    }
+    logger.warn(` ${errors.length} errors found during ${category} import`);
   });
-};
+}

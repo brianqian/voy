@@ -1,10 +1,15 @@
-import { assertPresent } from '../lib/helpers/index.js';
+import { NonNullableObject } from 'app/lib/helpers/types.js';
+import { allValuesExist, trueEnv } from '../lib/helpers/index.js';
 
 const config = {
-  IMDB_API_KEY: assertPresent(process.env.IMDB_API_KEY),
-  TMDB_API_KEY: assertPresent(process.env.TMDB_API_KEY),
+  IMDB_API_KEY: process.env.IMDB_API_KEY,
+  TMDB_API_KEY: process.env.TMDB_API_KEY,
+  MINIMAL_TMDB_SEED: trueEnv(process.env.MINIMAL_TMDB_SEED),
 };
 
-console.log('Config loaded');
+if (!allValuesExist(config)) {
+  throw new Error('Missing config value');
+}
 
-export default config;
+console.log('Config is valid');
+export default config as NonNullableObject<typeof config>;

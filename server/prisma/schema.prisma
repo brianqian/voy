@@ -32,7 +32,7 @@ model Person {
   birthDate      DateTime?
   deathDate      DateTime?
   Movie_Cast     Movie_Cast[]
-  TV_Cast        TV_Cast[]
+  Tv_Cast        Tv_Cast[]
 
   @@map("person")
 }
@@ -68,7 +68,7 @@ model Movie {
   @@map("movie")
 }
 
-model TVSeries {
+model TvSeries {
   id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   imdbId                  String?                   @unique
   tmdbId                  String?                   @unique
@@ -93,10 +93,10 @@ model TVSeries {
   Media_Awards            Media_Awards[]
   Media_Genre             Media_Genre[]
   Media_ProductionCompany Media_ProductionCompany[]
-  TV_Cast                 TV_Cast[]
+  Tv_Cast                 Tv_Cast[]
   TV_Episode              TVEpisode[]
-  TV_Show_Networks        TV_Show_Networks[]
-  TVSeriessListItem       TVSeriessListItem[]
+  TV_Show_Networks        Tv_Show_Networks[]
+  TVSeriessListItem       TvSeriessListItem[]
   User_Ratings            User_Ratings[]
 
   @@map("tv_show")
@@ -121,7 +121,7 @@ model Network {
   tmdbId           String?            @unique
   imdbId           String?            @unique
   name             String
-  TV_Show_Networks TV_Show_Networks[]
+  TV_Show_Networks Tv_Show_Networks[]
 
   @@map("network")
 }
@@ -151,12 +151,12 @@ model MoviesListItem {
   @@map("movie_list_item")
 }
 
-model TVSeriessListItem {
+model TvSeriessListItem {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   tvSeriesId String    @db.Uuid
   userListId String    @db.Uuid
-  tvSeries   TVSeries  @relation(fields: [tvSeriesId], references: [id])
+  tvSeries   TvSeries  @relation(fields: [tvSeriesId], references: [id])
   userList   User_List @relation(fields: [userListId], references: [id])
 
   @@id([tvSeriesId, userListId])
@@ -173,9 +173,9 @@ model TVEpisode {
   imdbRating       Int?
   metacriticRating Int?
   imdbVoteCount    Int?
-  tvSeries         TVSeries       @relation(fields: [tvSeriesId], references: [id])
+  tvSeries         TvSeries       @relation(fields: [tvSeriesId], references: [id])
   Media_Awards     Media_Awards[]
-  TV_Cast          TV_Cast[]
+  Tv_Cast          Tv_Cast[]
 
   @@map("tv_episode")
 }
@@ -194,7 +194,7 @@ model Movie_Cast {
   @@map("movies_casts")
 }
 
-model TV_Cast {
+model Tv_Cast {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   tvEpisodeId   String    @db.Uuid
@@ -204,7 +204,7 @@ model TV_Cast {
   tvSeriesId    String    @db.Uuid
   person        Person    @relation(fields: [personId], references: [id])
   tvEpisode     TVEpisode @relation(fields: [tvEpisodeId], references: [id])
-  TVSeries      TVSeries  @relation(fields: [tvSeriesId], references: [id])
+  tvSeries      TvSeries  @relation(fields: [tvSeriesId], references: [id])
 
   @@id([personId, tvEpisodeId, role])
   @@map("tv_casts")
@@ -218,7 +218,7 @@ model Media_Genre {
   tvSeriesId String?   @db.Uuid
   movieId    String?   @db.Uuid
   movie      Movie?    @relation(fields: [movieId], references: [id])
-  tvSeries   TVSeries? @relation(fields: [tvSeriesId], references: [id])
+  tvSeries   TvSeries? @relation(fields: [tvSeriesId], references: [id])
 
   @@map("media_genres")
 }
@@ -232,18 +232,18 @@ model User_List {
   type              TVOrMovie?
   user              User                @relation(fields: [userId], references: [id])
   MoviesListItem    MoviesListItem[]
-  TVSeriessListItem TVSeriessListItem[]
+  TVSeriessListItem TvSeriessListItem[]
 
   @@map("users_lists")
 }
 
-model TV_Show_Networks {
+model Tv_Show_Networks {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   tvSeriesId String   @db.Uuid
   networkId  String   @db.Uuid
   network    Network  @relation(fields: [networkId], references: [id])
-  tvSeries   TVSeries @relation(fields: [tvSeriesId], references: [id])
+  tvSeries   TvSeries @relation(fields: [tvSeriesId], references: [id])
 
   @@id([tvSeriesId, networkId])
   @@map("tv_series_networks")
@@ -258,7 +258,7 @@ model User_Ratings {
   tvSeriesId String?   @db.Uuid
   movieId    String?   @db.Uuid
   movie      Movie?    @relation(fields: [movieId], references: [id])
-  tvSeries   TVSeries? @relation(fields: [tvSeriesId], references: [id])
+  tvSeries   TvSeries? @relation(fields: [tvSeriesId], references: [id])
   user       User      @relation(fields: [userId], references: [id])
 
   @@map("users_ratings")
@@ -273,7 +273,7 @@ model Media_Awards {
   award       Award      @relation(fields: [awardId], references: [id])
   movie       Movie?     @relation(fields: [movieId], references: [id])
   tvEpisode   TVEpisode? @relation(fields: [tvEpisodeId], references: [id])
-  tvSeries    TVSeries?  @relation(fields: [tvSeriesId], references: [id])
+  tvSeries    TvSeries?  @relation(fields: [tvSeriesId], references: [id])
 
   @@map("media_awards")
 }
@@ -287,7 +287,7 @@ model Media_ProductionCompany {
   movieId    String?           @db.Uuid
   company    ProductionCompany @relation(fields: [companyId], references: [id])
   movie      Movie?            @relation(fields: [movieId], references: [id])
-  tvSeries   TVSeries?         @relation(fields: [tvSeriesId], references: [id])
+  tvSeries   TvSeries?         @relation(fields: [tvSeriesId], references: [id])
 
   @@map("media_production_companies")
 }

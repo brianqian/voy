@@ -49,6 +49,8 @@
     "no-unused-vars": "off",
     "implicit-arrow-linebreak": "off",
     "object-curly-newline": "off",
+    "operator-linebreak": "off",
+    "no-restricted-syntax": "off",
     "lines-between-class-members": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/comma-dangle": [
