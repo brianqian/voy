@@ -14,7 +14,11 @@ async function doWork() {
   //   })
   // );
 
-  Services.tmdb.importExported.importTmdbDaily('tv_series');
+  await Promise.all([
+    Services.tmdb.importExported.importTmdbDaily('tv_network'),
+    Services.tmdb.importExported.importTmdbDaily('production_company'),
+    Services.tmdb.importExported.importTmdbDaily('tv_series'),
+  ]);
 }
 
 export const startServer = () => {

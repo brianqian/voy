@@ -1,4 +1,6 @@
+import chalk from 'chalk';
 import { PrismaClient, Prisma } from '@prisma/client';
+import { logger } from '../logger/index.js';
 
 const LOG_QUERY_TIME = false;
 const LOG_QUERIES = false;
@@ -41,9 +43,10 @@ prisma.$use(async (params: Prisma.MiddlewareParams, next: any) => {
       console.log(params.args);
       console.log(params.dataPath);
       console.log(params.action);
-      throw new Error();
+      console.error(err);
     }
-    console.error(err);
+    logger.error(err);
+    return null;
   }
 });
 
@@ -52,7 +55,7 @@ prisma.$on('query', (event: Prisma.QueryEvent) => {
     return;
   }
   if (LOG_QUERIES) {
-    console.log(event.query);
+    console.log(`${chalk.cyan('[prisma-query]')} -- ${event.query}`);
   }
 });
 

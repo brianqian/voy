@@ -1,4 +1,5 @@
 /* eslint-disable import/no-duplicates */
+import chalk from 'chalk';
 import { assert } from '@sindresorhus/is';
 import { format, sub } from 'date-fns';
 import got from 'got';
@@ -33,10 +34,18 @@ const isTvOrMovieItem = (item: ExportLineItem): item is TVOrMovieItem => {
   return 'original_name' in item;
 };
 
+const getFullPath = (category: CategoryName) => {
+  const yesterday = format(sub(new Date(), { days: 1 }), 'MM_dd_yyyy');
+  return `${ROOT_PATH}${category}_ids_${yesterday}.json.gz`;
+};
+
 const insertDailyIntoDb = async (item: ExportLineItem, category: CategoryName) => {
   const { id } = item;
   const name = isTvOrMovieItem(item) ? item.original_name : item.name;
-  if (!name || !id) return;
+  if (!name || !id) {
+    console.error('no name or id found', { name }, { id });
+    return 0;
+  }
   assert.number(id);
   assert.string(name);
   const tmdbId = id.toString();
@@ -47,7 +56,7 @@ const insertDailyIntoDb = async (item: ExportLineItem, category: CategoryName) =
         update: { tmdbId, originalTitle: name },
         create: { tmdbId, originalTitle: name },
       });
-      break;
+      return 1;
     }
     case 'movie': {
       await prisma.movie.upsert({
@@ -55,7 +64,7 @@ const insertDailyIntoDb = async (item: ExportLineItem, category: CategoryName) =
         update: { tmdbId, originalTitle: name },
         create: { tmdbId, originalTitle: name },
       });
-      break;
+      return 1;
     }
     case 'tv_network': {
       await prisma.network.upsert({
@@ -63,7 +72,7 @@ const insertDailyIntoDb = async (item: ExportLineItem, category: CategoryName) =
         update: { tmdbId, name },
         create: { tmdbId, name },
       });
-      break;
+      return 1;
     }
     case 'production_company': {
       await prisma.productionCompany.upsert({
@@ -71,7 +80,7 @@ const insertDailyIntoDb = async (item: ExportLineItem, category: CategoryName) =
         update: { tmdbId, name },
         create: { tmdbId, name },
       });
-      break;
+      return 1;
     }
     case 'person': {
       await prisma.person.upsert({
@@ -79,23 +88,18 @@ const insertDailyIntoDb = async (item: ExportLineItem, category: CategoryName) =
         update: { tmdbId, name },
         create: { tmdbId, name },
       });
-      break;
+      return 1;
     }
     default:
       throw new Error(`Invalid Category Name: ${category}`);
   }
 };
 
-const getFullPath = (category: CategoryName) => {
-  const yesterday = format(sub(new Date(), { days: 1 }), 'MM_dd_yyyy');
-  return `${ROOT_PATH}${category}_ids_${yesterday}.json.gz`;
-};
-
 export const importTmdbDaily = async (category: CategoryName) => {
   const downloadStream = got.stream(getFullPath(category));
 
   downloadStream.on('downloadProgress', (progress) => {
-    console.log(`${getFullPath(category)}: ${progress.percent}%`);
+    console.log(`${getFullPath(category)}: ${(progress.percent * 100).toFixed(3)}%`);
   });
 
   const pipeline = new Chain([
@@ -105,7 +109,25 @@ export const importTmdbDaily = async (category: CategoryName) => {
     (data) => data.value,
   ]);
 
+  let totalCount = 0;
+  let recordCount = 0;
+  const errors = [];
   pipeline.on('data', async (data: ExportLineItem) => {
-    insertDailyIntoDb(data, category);
+    totalCount += 1;
+    const insertedCount = await insertDailyIntoDb(data, category);
+    recordCount += insertedCount;
+    if (recordCount % 10000 === 0) {
+      console.log(`[${category}] -- ${recordCount} records added.`);
+    }
+  });
+
+  pipeline.on('error', (err) => {
+    errors.push(err);
+  });
+  pipeline.on('end', () => {
+    console.log(
+      `${chalk.blue(category)} import complete. ${recordCount}/${totalCount} records imported`
+    );
+    console.log(`Errors: ${errors.length}`);
   });
 };
