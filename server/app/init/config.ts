@@ -1,4 +1,4 @@
-import { NonNullableObject } from 'app/lib/helpers/types.js';
+import { NonNullableObject } from '../lib/helpers/types.js';
 import { allValuesExist, trueEnv } from '../lib/helpers/index.js';
 
 const config = {

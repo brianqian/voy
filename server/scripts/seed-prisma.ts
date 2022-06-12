@@ -1,15 +1,14 @@
 import { differenceInWeeks } from 'date-fns';
-import { TMDB_EXPORT_CATEGORIES } from 'app/services/tmdb/types.js';
-import prisma from 'app/lib/prisma-client/index.js';
+import { TMDB_EXPORT_CATEGORIES } from '../app/services/tmdb/types.js';
+import prisma from '../app/lib/prisma-client/index.js';
 import { assertUnreachable, wrap } from '../app/lib/helpers/index.js';
 import { importTmdbDaily } from '../app/services/tmdb/import-daily-file.js';
-
-const MINIMAL_SEED = true;
+import config from '../app/init/config.js';
 
 async function seedDatabaseFromDailyImports() {
   // Filter out categories that have been updated within the last week
   const categories = TMDB_EXPORT_CATEGORIES.filter(async (category) => {
-    if (MINIMAL_SEED) {
+    if (config.MINIMAL_TMDB_SEED) {
       if (['movie', 'person'].includes(category)) {
         return false;
       }

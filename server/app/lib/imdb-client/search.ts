@@ -1,5 +1,5 @@
 import got from 'got';
-import Bourne from '@hapi/bourne';
+import { parse } from '@hapi/bourne';
 import { SearchData } from '../../../types/imdb-api';
 import config from '../../init/config.js';
 
@@ -26,7 +26,7 @@ const buildPath = (endpoint: string, queryValue: string): string => {
 const searchBuilder = (target: SearchEndpoints): SearchMethod => {
   return async (queryValue: string) => {
     const result: SearchData = await got(buildPath(`Search${target}`, queryValue), {
-      parseJson: (text) => Bourne.parse(text),
+      parseJson: (text) => parse(text),
       responseType: 'json',
     }).json();
     return result;
