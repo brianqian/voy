@@ -44,10 +44,7 @@ CREATE TABLE "person" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "firstName" TEXT NOT NULL,
-    "middleName" TEXT,
-    "lastName" TEXT,
-    "suffix" TEXT,
+    "name" TEXT NOT NULL,
     "imdbId" TEXT,
     "tmdbId" TEXT,
     "tmdbPopularity" REAL,
@@ -65,8 +62,8 @@ CREATE TABLE "movie" (
     "tmdbPopularity" REAL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "title" TEXT NOT NULL,
-    "originalTitle" TEXT,
+    "title" TEXT,
+    "originalTitle" TEXT NOT NULL,
     "fullTitle" TEXT,
     "releaseDate" TIMESTAMP(3),
     "USReleaseDate" TIMESTAMP(3),
@@ -74,7 +71,7 @@ CREATE TABLE "movie" (
     "overview" TEXT,
     "alternateOverview" TEXT,
     "tagline" TEXT,
-    "mpaaRating" "MPAARating" NOT NULL,
+    "mpaaRating" "MPAARating",
     "imdbRating" INTEGER,
     "imdbVoteCount" INTEGER,
     "metacriticRating" INTEGER,
@@ -91,8 +88,8 @@ CREATE TABLE "tv_show" (
     "tmdbPopularity" REAL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "title" TEXT NOT NULL,
-    "originalTitle" TEXT,
+    "title" TEXT,
+    "originalTitle" TEXT NOT NULL,
     "fullTitle" TEXT,
     "type" TEXT NOT NULL DEFAULT E'TV Show',
     "releaseDate" TIMESTAMP(3),
@@ -104,8 +101,8 @@ CREATE TABLE "tv_show" (
     "tagline" TEXT,
     "imdbRating" INTEGER,
     "imdbVoteCount" INTEGER,
-    "airTime" TEXT NOT NULL,
-    "nextScheduledAirtime" TIMESTAMP(3) NOT NULL,
+    "airTime" TEXT,
+    "nextScheduledAirtime" TIMESTAMP(3),
 
     CONSTRAINT "tv_show_pkey" PRIMARY KEY ("id")
 );
@@ -279,6 +276,39 @@ CREATE TABLE "media_production_companies" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "person_imdbId_key" ON "person"("imdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "person_tmdbId_key" ON "person"("tmdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "movie_imdbId_key" ON "movie"("imdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "movie_tmdbId_key" ON "movie"("tmdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "tv_show_imdbId_key" ON "tv_show"("imdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "tv_show_tmdbId_key" ON "tv_show"("tmdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "production_company_tmdbId_key" ON "production_company"("tmdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "production_company_imdbId_key" ON "production_company"("imdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "network_tmdbId_key" ON "network"("tmdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "network_imdbId_key" ON "network"("imdbId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "tv_episode_tmdbId_key" ON "tv_episode"("tmdbId");
 
 -- AddForeignKey
 ALTER TABLE "movie_list_item" ADD CONSTRAINT "movie_list_item_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "movie"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
