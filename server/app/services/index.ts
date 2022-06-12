@@ -1,4 +1,3 @@
-import * as dataImport from './data-import/index.js';
-import * as tmdbIngestion from './tmdb-ingestion/index.js';
+import * as tmdb from './tmdb/index.js';
 
-export default { dataImport, tmdbIngestion };
+export { tmdb };

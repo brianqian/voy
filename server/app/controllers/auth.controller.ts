@@ -8,6 +8,6 @@ export async function createUser(req: Request, res: Response) {
 }
 
 export async function nativeLogin() {
-  const user = await prisma.user.find;
+  // const user = await prisma.user.find;
   console.log('login user service hit');
 }

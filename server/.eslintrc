@@ -47,6 +47,8 @@
     "comma-dangle": "off",
     "no-underscore-dangle": "off",
     "no-unused-vars": "off",
+    "implicit-arrow-linebreak": "off",
+    "object-curly-newline": "off",
     "lines-between-class-members": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/comma-dangle": [
