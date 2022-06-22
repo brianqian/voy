@@ -41,7 +41,9 @@
     "prisma": "~3.14.0",
     "stream-chain": "~2.2.5",
     "stream-json": "~1.7.4",
-    "winston": "~3.7.2"
+    "winston": "~3.7.2",
+    "lodash": "~4.17.21",
+    "zod": "~3.17.3"
   },
   "devDependencies": {
     "@swc/core": "~1.2.181",
@@ -65,6 +67,7 @@
     "eslint-plugin-unused-imports": "~2.0.0",
     "jest": "~28.1.0",
     "ts-node": "~10.7.0",
-    "typescript": "~4.7.3"
+    "typescript": "~4.7.3",
+    "@types/lodash": "~4.14.182"
   }
 }

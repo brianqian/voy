@@ -5,10 +5,7 @@ export module Result {
   /**
    * Enum capturing status of operation
    */
-  export enum Status {
-    SUCCESS = 'SUCCESS',
-    FAILURE = 'FAILURE',
-  }
+  export type Status = 'SUCCESS' | 'FAILURE';
 
   /**
    * A successful result.
@@ -16,17 +13,17 @@ export module Result {
    * @member value the value associated with this successful result
    */
   export interface SuccessType<TSuccess> {
-    readonly type: Status.SUCCESS;
+    readonly type: 'SUCCESS';
     readonly value: TSuccess;
   }
 
   /**
    * A failed result.
-   * @member type always `Status.FAILURE`
+   * @member type always `'FAILURE'`
    * @member value the value associated with this failed result
    */
   export interface FailureType<TFailure> {
-    readonly type: Status.FAILURE;
+    readonly type: 'FAILURE';
     readonly value: TFailure;
   }
 
@@ -42,7 +39,7 @@ export module Result {
    * @description equal to `lift()` / `return()` in category theory
    */
   export function success<TSuccess>(value: TSuccess): SuccessType<TSuccess> {
-    return { type: Status.SUCCESS, value };
+    return { type: 'SUCCESS', value };
   }
 
   /**
@@ -50,7 +47,7 @@ export module Result {
    * @param value a value to use in a failed result
    */
   export function failure<TFailure>(value: TFailure): FailureType<TFailure> {
-    return { type: Status.FAILURE, value };
+    return { type: 'FAILURE', value };
   }
 
   /**
@@ -62,7 +59,7 @@ export module Result {
   export function isSuccess<TSuccess, TFailure>(
     result: Type<TSuccess, TFailure>
   ): result is SuccessType<TSuccess> {
-    return result.type === Status.SUCCESS;
+    return result.type === 'SUCCESS';
   }
 
   /**
@@ -74,7 +71,7 @@ export module Result {
   export function isFailure<TSuccess, TFailure>(
     result: Type<TSuccess, TFailure>
   ): result is FailureType<TFailure> {
-    return result.type === Status.FAILURE;
+    return result.type === 'FAILURE';
   }
 
   export function toMaybe<S>(v: Result.Type<S, any>): S | null {

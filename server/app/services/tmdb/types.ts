@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export const TMDB_EXPORT_CATEGORIES = [
   'tv_network', // 1 - smallest -- name
   'production_company', // 2 -- name
@@ -7,18 +9,49 @@ export const TMDB_EXPORT_CATEGORIES = [
   // 'collection',
   // 'keyword',
 ] as const;
-export type CategoryName = typeof TMDB_EXPORT_CATEGORIES[number];
-export interface TVOrMovieItem {
-  id: number;
-  original_name: string;
-}
 
-export interface NonTVOrMovieItem {
-  id: number;
-  name: string;
-}
-export type ExportLineItem = TVOrMovieItem | NonTVOrMovieItem;
+const TmdbExportCategoryEnum = z.enum(TMDB_EXPORT_CATEGORIES);
+export type TmdbExportCategoryEnum = z.infer<typeof TmdbExportCategoryEnum>;
 
-export const isTvOrMovieItem = (item: ExportLineItem): item is TVOrMovieItem => {
-  return 'original_name' in item;
-};
+export const MovieItem = z.object({
+  category: z.literal('movie'),
+  id: z.number(),
+  original_title: z.string(),
+  popularity: z.number(),
+});
+export type MovieItem = z.infer<typeof MovieItem>;
+
+export const TvItem = z.object({
+  category: z.literal('tv_series'),
+  id: z.number(),
+  original_name: z.string(),
+  popularity: z.number(),
+});
+export type TvItem = z.infer<typeof TvItem>;
+
+export const NetworkItem = z.object({
+  category: z.literal('tv_network'),
+  id: z.number(),
+  name: z.string(),
+});
+
+export type NetworkItem = z.infer<typeof NetworkItem>;
+
+export const CompanyItem = z.object({
+  category: z.literal('production_company'),
+  id: z.number(),
+  name: z.string(),
+});
+
+export type CompanyItem = z.infer<typeof CompanyItem>;
+
+export const PersonItem = z.object({
+  category: z.literal('person'),
+  id: z.number(),
+  name: z.string(),
+  popularity: z.number(),
+});
+
+export type PersonItem = z.infer<typeof PersonItem>;
+
+export type ExportLineItem = MovieItem | CompanyItem | TvItem | PersonItem | NetworkItem;

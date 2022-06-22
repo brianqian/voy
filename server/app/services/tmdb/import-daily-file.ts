@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import chalk from 'chalk';
 import { assert } from '@sindresorhus/is';
 import { format, sub } from 'date-fns';
@@ -5,46 +6,49 @@ import got from 'got';
 import Chain from 'stream-chain';
 import StreamValues from 'stream-json/streamers/StreamValues.js';
 import zlib from 'zlib';
-import { CategoryName, ExportLineItem, isTvOrMovieItem } from 'app/services/tmdb/types.js';
-import prisma from 'app/lib/prisma-client/index.js';
-import { logger } from 'app/lib/logger/index.js';
+import {
+  TmdbExportCategoryEnum,
+  ExportLineItem,
+  MovieItem,
+  TvItem,
+  NetworkItem,
+  CompanyItem,
+  PersonItem,
+} from './types.js';
+import prisma from '../../lib/prisma-client/index.js';
+import { logger } from '../../lib/logger/index.js';
 
 const ROOT_PATH = 'http://files.tmdb.org/p/exports/';
 
-const getFullPath = (category: CategoryName) => {
+const getFullPath = (category: TmdbExportCategoryEnum) => {
   const yesterday = format(sub(new Date(), { days: 1 }), 'MM_dd_yyyy');
   return `${ROOT_PATH}${category}_ids_${yesterday}.json.gz`;
 };
 
-async function insertDailyIntoDb(item: ExportLineItem, category: CategoryName): Promise<number> {
-  const { id } = item;
-  const name = isTvOrMovieItem(item) ? item.original_name : item.name;
-  if (!name || !id) {
-    console.error('no name or id found', { name }, { id });
-    return 0;
-  }
-  assert.number(id);
-  assert.string(name);
+async function insertDailyIntoDb(item: ExportLineItem): Promise<number> {
+  const { id, category } = item;
   const tmdbId = id.toString();
-  // const tableName = getTableFromCategory(category);
   switch (category) {
     case 'tv_series': {
+      const { popularity, original_name: originalTitle } = item;
       await prisma.tvSeries.upsert({
         where: { tmdbId },
-        update: { tmdbId, originalTitle: name },
-        create: { tmdbId, originalTitle: name },
+        update: { tmdbId, originalTitle, tmdbPopularity: popularity },
+        create: { tmdbId, originalTitle, tmdbPopularity: popularity },
       });
       return 1;
     }
     case 'movie': {
+      const { popularity, original_title: originalTitle } = item;
       await prisma.movie.upsert({
         where: { tmdbId },
-        update: { tmdbId, originalTitle: name },
-        create: { tmdbId, originalTitle: name },
+        update: { tmdbId, originalTitle, tmdbPopularity: popularity },
+        create: { tmdbId, originalTitle, tmdbPopularity: popularity },
       });
       return 1;
     }
     case 'tv_network': {
+      const { name } = item;
       await prisma.network.upsert({
         where: { tmdbId },
         update: { tmdbId, name },
@@ -53,6 +57,7 @@ async function insertDailyIntoDb(item: ExportLineItem, category: CategoryName): 
       return 1;
     }
     case 'production_company': {
+      const { name } = item;
       await prisma.productionCompany.upsert({
         where: { tmdbId },
         update: { tmdbId, name },
@@ -61,10 +66,11 @@ async function insertDailyIntoDb(item: ExportLineItem, category: CategoryName): 
       return 1;
     }
     case 'person': {
+      const { popularity, name } = item;
       await prisma.person.upsert({
         where: { tmdbId },
-        update: { tmdbId, name },
-        create: { tmdbId, name },
+        update: { tmdbId, name, tmdbPopularity: popularity },
+        create: { tmdbId, name, tmdbPopularity: popularity },
       });
       return 1;
     }
@@ -73,7 +79,7 @@ async function insertDailyIntoDb(item: ExportLineItem, category: CategoryName): 
   }
 }
 
-export async function importTmdbDaily(category: CategoryName) {
+export async function importTmdbDaily(category: TmdbExportCategoryEnum) {
   const downloadStream = got.stream(getFullPath(category));
 
   downloadStream.on('downloadProgress', (progress) => {
@@ -90,12 +96,16 @@ export async function importTmdbDaily(category: CategoryName) {
   let totalCount = 0;
   let recordCount = 0;
   const errors = [];
-  pipeline.on('data', async (data: ExportLineItem) => {
+  pipeline.on('data', async (data: unknown) => {
     totalCount += 1;
-    const insertedCount = await insertDailyIntoDb(data, category);
+    assert.plainObject(data);
+    const parsedData: ExportLineItem = z
+      .discriminatedUnion('category', [MovieItem, TvItem, NetworkItem, CompanyItem, PersonItem])
+      .parse({ ...data, category });
+    const insertedCount = await insertDailyIntoDb(parsedData);
     recordCount += insertedCount;
     if (recordCount % 10000 === 0) {
-      console.log(`[${category}] -- ${recordCount} records added.`);
+      console.log(`[${chalk.blue(category)}] -- ${recordCount} records added.`);
     }
   });
 
@@ -103,12 +113,11 @@ export async function importTmdbDaily(category: CategoryName) {
     errors.push(err);
   });
   pipeline.on('end', () => {
-    console.log(
-      `${chalk.blue(category)} import complete. ${recordCount}/${totalCount} records imported`
+    logger.info(
+      `${chalk.green(category)} import complete. ${recordCount}/${totalCount} records imported`
     );
     if (errors.length > 0) {
       logger.warn(` ${errors.length} errors found during ${category} import`);
     }
-    logger.warn(` ${errors.length} errors found during ${category} import`);
   });
 }
