@@ -11,11 +11,13 @@ async function seedDatabaseFromDailyImports() {
   // Filter out categories that have been updated within the last week
   const categories = await Promise.all(
     TMDB_EXPORT_CATEGORIES.map(async (category) => {
-      if (config.MINIMAL_TMDB_SEED) {
-        if (['movie', 'person'].includes(category)) {
-          return null;
-        }
+      if (!config.IMPORT_TMDB_MOVIE_EXPORT && category === 'movie') {
+        return null;
       }
+      if (!config.IMPORT_TMDB_PEOPLE_EXPORT && category === 'person') {
+        return null;
+      }
+
       const lastUpdatedDate = await wrap(async () => {
         switch (category) {
           case 'tv_network':

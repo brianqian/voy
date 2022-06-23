@@ -1,16 +1,26 @@
 import winston from 'winston';
 
+const { combine, timestamp, uncolorize, printf, simple } = winston.format;
+
+const customFormat = printf(({ level, message, timestamp: privTimestamp }) => {
+  return `${privTimestamp} [${level}] -- ${message}`;
+});
 export const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
   transports: [
     //
     // - Write all logs with importance level of `error` or less to `error.log`
     // - Write all logs with importance level of `info` or less to `combined.log`
     //
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: './app/logs/error.log', level: 'error' }),
-    new winston.transports.File({ filename: './app/logs/combined.log' }),
+    // new winston.transports.Console({format: }),
+    new winston.transports.File({
+      filename: './app/logs/error.log',
+      level: 'error',
+      format: combine(timestamp(), uncolorize(), simple(), customFormat),
+    }),
+    new winston.transports.File({
+      filename: './app/logs/combined.log',
+      format: combine(timestamp(), uncolorize(), simple(), customFormat),
+    }),
   ],
 });
 
@@ -21,7 +31,7 @@ export const logger = winston.createLogger({
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new winston.transports.Console({
-      format: winston.format.simple(),
+      format: combine(timestamp(), simple(), customFormat),
     })
   );
 }
